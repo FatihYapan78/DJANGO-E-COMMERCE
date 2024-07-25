@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    
+
+    
+
+
+        <!-- Single Page Header start -->
+        <div class="container-fluid page-header py-5">
+            <h1 class="text-center text-white display-6">Cart</h1>
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item active text-white">Cart</li>
+            </ol>
+        </div>
+        <!-- Single Page Header End -->
+
+
+        <!-- Cart Page Start -->
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <div id="update-notification" class="alert alert-success" style="display: none; position: fixed; top: 150px; right: 50px; width: 150px;"></div>
+                <div id="delete-notification" class="alert alert-danger" style="display: none; position: fixed; top: 150px; right: 50px; width: 150px;"></div>
+                
+                {% if request.user.is_authenticated %}
+                {% if products %}
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Products</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Handle</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for product in products %}      
+                            <tr id="product-{{ product.product.id }}">
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ product.product.image.url }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    </div>
+                                </th>
+                                <td>
+                                    <p class="mb-0 mt-4">{{ product.product.name }}</p>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">{{ product.product.price }} $</p>
+                                </td>
+                                <td>
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border btn-qty" value="{{ product.product.id }}" name="btn-minus">
+                                            <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        
+                                            <input type="text" class="form-control form-control-sm text-center border-0" value="{{ product.quantity }}">
+                                            
+                                        
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border btn-qty" value="{{ product.product.id }}" name="btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4" id="prod_total_price-{{ product.product.id }}">
+                                                
+                                                {% if product.prod_total_price %}
+                                                {{ product.prod_total_price }}
+                                                {% else %}
+                                                {{ product.product.price }}
+                                                    
+                                                {% endif %}
+                                                    
+                                            
+                                        $</p>
+                                </td>
+                                <td>
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4 prod-del" value="{{ product.product.id }}">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                </td>
+                            
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <h1>SEPETENİZDE ÜRÜN BULUNMAMAKTADIR. LÜTFEN SEPETE ÜRÜN EKLEYİNİZ.</h1>
+                {% endif %}
+                
+                {% else %}
+                {% if products %}
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Products</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Handle</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for product in products %}      
+                            <tr id="product-{{ product.id }}">
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ product.image.url }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    </div>
+                                </th>
+                                <td>
+                                    <p class="mb-0 mt-4">{{ product.name }}</p>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">{{ product.price }} $</p>
+                                </td>
+                                <td>
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border btn-qty" value="{{ product.id }}" name="btn-minus">
+                                            <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        {% for key,value in quantities.items %}
+                                            
+                                            {% if key == product.id|slugify %}
+                                            <input type="text" class="form-control form-control-sm text-center border-0" value="{{ value.qty }}">
+                                            {% endif %}
+                                                
+                                        {% endfor %}
+                                            
+                                        
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border btn-qty" value="{{ product.id }}" name="btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4" id="prod_total_price-{{ product.id }}">
+                                        
+                                        {% for key, value in prod_total_price.items %}
+                                            
+                                            {% if key == product.id|slugify %}
+                                                {{ value.price }}
+                                            {% endif %}
+                                                
+                                        {% endfor %}
+                                            
+                                        $</p>
+                                </td>
+                                <td>
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4 prod-del" value="{{ product.id }}">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                </td>
+                            
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <h1>SEPETENİZDE ÜRÜN BULUNMAMAKTADIR. LÜTFEN SEPETE ÜRÜN EKLEYİNİZ.</h1>
+                {% endif %}
+                {% endif %}
+                <h1 style="display: none;" id="no-product"></h1>
+                <div class="mt-5">
+                    <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
+                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
+                </div>
+                <div class="row g-4 justify-content-end">
+                    <div class="col-8"></div>
+                    <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
+                        <div class="bg-light rounded">
+                            <div class="p-4">
+                                <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <h5 class="mb-0 me-4">Subtotal:</h5>
+                                    <p class="mb-0" id="total_price">$ {{ total_price }}</p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="mb-0 me-4">Shipping</h5>
+                                    <div class="">
+                                        <p class="mb-0">Flat rate: $3.00</p>
+                                    </div>
+                                </div>
+                                <p class="mb-0 text-end">Shipping to Ukraine.</p>
+                            </div>
+                            <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                                <h5 class="mb-0 ps-4 me-4">Total</h5>
+                                <p class="mb-0 pe-4">$99.00</p>
+                            </div>
+                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cart Page End -->
+        {% endblock content %}
+
+
+        {% block extrajs %}
+        <script>
+            $(".btn-qty").on("click", function(e){
+                e.preventDefault();
+                var product_id = $(this).val();
+                var btn_qty = $(this).attr("name");
+
+                $.ajax({
+                    method: "POST",
+                    url: "{% url 'update_to_cart' %}",
+                    data: {
+                        "product_id":product_id,
+                        "btn_qty":btn_qty,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+
+                    success:function(data){
+                        $("#prod_total_price-" + product_id).html(data.product_total_price + " $");
+                        $("#total_price").html("$ " + data.total_price);
+                        $("#update-notification").text(data.message).fadeIn().delay(1000).fadeOut();
+                    }
+                })
+            })
+
+            $(".prod-del").on("click", function(e){
+                e.preventDefault();
+                var product_id = $(this).val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "{% url 'delete_to_cart' %}",
+                    data: {
+                        "product_id":product_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+
+                    success:function(data){
+                        $("#cart_quantity").html(data.cart_quantity);
+                        $("#product-" + product_id).remove()
+                        $("#total_price").html("$ " + data.total_price);
+                        $("#delete-notification").text(data.message).fadeIn().delay(1000).fadeOut();
+
+                        if(data.cart_quantity == 0){
+                            $("#no-product").css("display","block");
+                            $("#no-product").html("SEPETENİZDE ÜRÜN BULUNMAMAKTADIR. LÜTFEN SEPETE ÜRÜN EKLEYİNİZ.");
+                            $(".table-responsive").css("display","none");
+                        }
+                    }
+                })
+            })
+        </script>
+{% endblock extrajs %}
