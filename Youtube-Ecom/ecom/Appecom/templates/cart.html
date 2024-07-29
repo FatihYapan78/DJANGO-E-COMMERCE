@@ -64,7 +64,7 @@
                                             </button>
                                         </div>
                                         
-                                            <input type="text" class="form-control form-control-sm text-center border-0" value="{{ product.quantity }}">
+                                            <input type="text" class="form-control form-control-sm text-center border-0" value="{{ product.quantity }}" id="qty_input">
                                             
                                         
                                         <div class="input-group-btn">
@@ -211,7 +211,13 @@
                                 <h5 class="mb-0 ps-4 me-4">Total</h5>
                                 <p class="mb-0 pe-4">$99.00</p>
                             </div>
-                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                            
+                            {% if cart|length == 0 %}
+                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" disabled>Proceed Checkout</button>
+                            {% else %}
+                            <a href="{% url 'chackout' %}" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">Proceed Checkout</a>
+                            {% endif %}
+                                
                         </div>
                     </div>
                 </div>
@@ -223,9 +229,25 @@
 
         {% block extrajs %}
         <script>
+            $(document).ready(function() {
+                var qty_input = $("#qty_input").val()
+                if(qty_input == 1){
+                    $(".btn-minus").attr("disabled", true);
+                }
+                else{
+                    $(".btn-minus").attr("disabled", false);
+                }
+            });
             $(".btn-qty").on("click", function(e){
                 e.preventDefault();
                 var product_id = $(this).val();
+                var qty_input = $("#qty_input").val()
+                if(qty_input == 1){
+                    $(".btn-minus").attr("disabled", true);
+                }
+                else{
+                    $(".btn-minus").attr("disabled", false);
+                }
                 var btn_qty = $(this).attr("name");
 
                 $.ajax({
@@ -271,5 +293,6 @@
                     }
                 })
             })
+        
         </script>
 {% endblock extrajs %}

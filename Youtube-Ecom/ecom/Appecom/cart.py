@@ -51,13 +51,13 @@ class Cart():
                 update_product.quantity -= qty
                 update_product.prod_total_price = Decimal(update_product.product.price) * Decimal(update_product.quantity)
                 update_product.save()
-
-        if btn_qty == "btn-plus":
-            self.cart[product_id]["qty"] += qty
-            self.cart[product_id]["price"] = str(self.cart[product_id]["qty"] * product.price)
         else:
-            self.cart[product_id]["qty"] -= qty
-            self.cart[product_id]["price"] = str(self.cart[product_id]["qty"] * product.price)
+            if btn_qty == "btn-plus":
+                self.cart[product_id]["qty"] += qty
+                self.cart[product_id]["price"] = str(self.cart[product_id]["qty"] * product.price)
+            else:
+                self.cart[product_id]["qty"] -= qty
+                self.cart[product_id]["price"] = str(self.cart[product_id]["qty"] * product.price)
 
         self.session.modified = True
 
