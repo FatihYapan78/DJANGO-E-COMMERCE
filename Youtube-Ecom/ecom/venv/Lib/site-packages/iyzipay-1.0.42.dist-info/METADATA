@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: iyzipay
+Version: 1.0.42
+Summary: iyzipay api python client
+Home-page: https://github.com/iyzico/iyzipay-python
+Author: iyzico
+Author-email: iyzico-ci@iyzico.com
+License: MIT
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+License-File: LICENSE
+
+Test Description
